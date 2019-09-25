@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int hammingDistance(int &x, int &y) {
+        int z1 = 0, z2 = 0, h = 0; 
+        while((x != 0) or (y != 0)){
+            z1 = x%2;
+            z2 = y%2;
+            if (z1 != z2){
+                h++;
+                
+            }
+            x = x/2;
+            y = y/2;
+        }
+        return h;
+        
+    }
+};
