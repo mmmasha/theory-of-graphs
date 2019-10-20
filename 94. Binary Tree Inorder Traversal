@@ -1,0 +1,32 @@
+https://leetcode.com/problems/binary-tree-inorder-traversal/
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+
+    vector<int> ans;
+        
+    if(root ==NULL) return ans; 
+    traversal(root,ans);
+        
+    return ans;
+    }
+    
+    void  traversal(TreeNode* head, vector<int>& ans)
+    {
+        if(!head) return ;
+        traversal(head->left,ans);
+        ans.push_back(head->val);
+        traversal(head->right,ans);
+    }
+};
