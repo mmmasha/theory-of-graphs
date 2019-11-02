@@ -1,5 +1,4 @@
-https://leetcode.com/problems/unique-paths/description/
-class Solution {
+https://leetcode.com/problems/unique-paths/
 public:
 	unsigned long int Fac(int n, int i, int k) {
 		unsigned long int f = 1;
