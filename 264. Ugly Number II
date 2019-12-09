@@ -1,0 +1,16 @@
+https://leetcode.com/problems/ugly-number-ii/
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        set<size_t>U;
+        U.insert(1);
+        size_t t = 0;
+        for(size_t i = 0; i < n; i++){
+            t = *U.lower_bound(t+1);
+            U.insert(t*2);
+            U.insert(t*3);
+            U.insert(t*5);  
+        }
+        return t;
+    }
+};
