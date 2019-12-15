@@ -1,0 +1,89 @@
+https://leetcode.com/problems/design-twitter/
+struct Tweet {
+    int timestamp;
+    int id;
+    Tweet* next;
+    Tweet(const int& timestamp, const int& id, Tweet* next) :
+        timestamp(timestamp), id(id), next(next) {}
+};
+struct User {
+    unordered_set<User*> followers;
+    unordered_set<User*> followees;
+    Tweet* tweets;
+    User() : tweets(nullptr) {}
+    void post(const int& timestamp, const int& tweetId) {
+        tweets = new Tweet(timestamp, tweetId, tweets);
+    }
+};
+
+class Twitter {
+    int timestamp;
+    unordered_map<int, User*> users;
+public:
+    /** Initialize your data structure here. */
+    Twitter() {
+        timestamp = 0;
+    }
+
+    /** Compose a new tweet. */
+    void postTweet(int userId, int tweetId) {
+        if (users.find(userId) == users.end()) {
+            users[userId] = new User();
+        }
+        users[userId]->post(timestamp++, tweetId);
+    }
+
+    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+    vector<int> getNewsFeed(int userId) {
+        if (users.find(userId) == users.end()) return {};
+        auto comp = [](Tweet* lhs, Tweet* rhs) {
+            return lhs->timestamp < rhs->timestamp;
+        };
+        priority_queue<Tweet*, vector<Tweet*>, decltype(comp)> pq(comp);
+
+        User* curr = users[userId];
+        if (curr->tweets) {
+            pq.push(curr->tweets);
+        }
+        for (User* f : curr->followees) {
+            if (f->tweets) {
+                pq.push(f->tweets);
+            }
+        }
+
+        vector<int> res;
+        while (res.size() < 10 && pq.size()) {
+            Tweet* curr = pq.top();
+            pq.pop();
+            res.push_back(curr->id);
+            if (curr->next) {
+                pq.push(curr->next);
+            }
+        }
+
+        return res;
+    }
+
+    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+    void follow(int followerId, int followeeId) {
+        if (followerId == followeeId) return ;
+        if (users.find(followerId) == users.end()) {
+            users[followerId] = new User();
+        }
+        if (users.find(followeeId) == users.end()) {
+            users[followeeId] = new User();
+        }
+        users[followerId]->followees.insert(users[followeeId]);
+        users[followeeId]->followers.insert(users[followerId]);
+    }
+
+    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+    void unfollow(int followerId, int followeeId) {
+        if (followerId == followeeId) return ;
+        if (users.find(followerId) == users.end() || users.find(followeeId) == users.end()) {
+            return ;
+        }
+        users[followerId]->followees.erase(users[followeeId]);
+        users[followeeId]->followers.erase(users[followerId]);
+    }
+};
