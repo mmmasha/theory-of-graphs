@@ -1,0 +1,30 @@
+https://leetcode.com/problems/rectangle-area/
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+
+        if (C<=E || A>=G || B>=H || D<=F )
+            return (C-A) * (D-B) + (G-E) * (H-F);
+        else
+        {
+            vector <int> x1;
+            x1.push_back(A);
+            x1.push_back(C);
+            x1.push_back(E);
+            x1.push_back(G);
+
+            vector <int> x2;
+            x2.push_back(B);
+            x2.push_back(D);
+            x2.push_back(F);
+            x2.push_back(H);
+
+            sort(x1.begin(), x1.end());
+            sort(x2.begin(), x2.end());
+
+            int total = - (x1[2] - x1 [1]) * (x2[2] - x2[1])
+                        + (C-A) * (D-B) + (G-E) * (H-F) ;
+            return total;
+        }
+    }
+};
